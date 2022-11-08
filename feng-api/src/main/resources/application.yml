@@ -1,0 +1,16 @@
+server:
+  port: 9091
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: feng-api
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+dubbo:
+  registry:
+    address: zookeeper://10.134.1.25:3002
+  protocol:
+    name: dubbo
+    port: 20899

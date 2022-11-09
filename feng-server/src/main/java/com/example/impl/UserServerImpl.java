@@ -1,6 +1,6 @@
 package com.example.impl;
 
-import com.example.User;
+import com.example.dto.User;
 import com.example.interfaces.UserServer;
 import com.example.mapper.UserMapper;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -16,7 +16,6 @@ public class UserServerImpl implements UserServer {
 
     @Override
     public User getUserInfo(Integer id) {
-        User userById = userMapper.getUserById(id);
-        return userById;
+        return userMapper.getUserById(id);
     }
 }

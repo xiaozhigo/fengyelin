@@ -1,0 +1,175 @@
+<configuration>
+    <!--<springProperty scope="context" name="LOG_HOME" source="spring.application.name"/>-->
+    <springProfile name="dev">
+        <property name="LOG_HOME" value="./logs"/> <!-- 日志保存目录 -->
+    </springProfile>
+    <springProfile name="master">
+        <property name="LOG_HOME" value="./logs"/> <!-- 日志保存目录 -->
+    </springProfile>
+
+    <!--设置日志目录-->
+    <!--<property name="LOG_HOME" value="./logs"/>-->
+    <property name="LOG_NAME" value="fengyelin-server"/><!--这里需要将value改成项目名称-->
+    <property name="maxSaveDays" value="365"/><!-- 日志最大保存天数 -->
+    <property name="maxFileSize" value="10GB"/><!-- 单个文件最大大小 -->
+    <!--控制台日志格式-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 文件日志策略：每天生成一个日志文件，保存30天的日志文件-->
+    <appender name="consoleFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}-%d{yyyy-MM-dd}-%i-console.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>　
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 文件日志策略：每天生成多个日志文件-->
+   <!-- <appender name="zipFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${LOG_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">　　　　　　
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}.%d{yyyy-MM-dd}.%console.zip</fileNamePattern>　　
+            <minIndex>1</minIndex>
+            <maxIndex>1000</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">　　　　　　　
+            <maxFileSize>100MB</maxFileSize>　　
+        </triggeringPolicy>
+        　　
+        <encoder>　　　　
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>　　
+        </encoder>
+    </appender>-->
+
+    <!-- 【实时位置同步】文件日志策略：每天生成一个日志文件，保存30天的日志文件-->
+    <appender name="debugAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}-%d{yyyy-MM-dd}-%i-debug.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!--仅输出DEBUG日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--接收DEBUG级别和高于DEBUG级别的日志-->
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>
+            <charset>UTF-8</charset>　
+        </encoder>
+    </appender>
+
+    <!-- 【用户事件同步】文件日志策略：每天生成一个日志文件，保存30天的日志文件-->
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}-%d{yyyy-MM-dd}-%i-info.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!--仅输出INFO日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>　
+        </encoder>
+    </appender>
+
+    <!-- 【用户轨迹同步】件日志策略：每天生成一个日志文件，保存30天的日志文件-->
+    <appender name="warningAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}-%d{yyyy-MM-dd}-%i-warning.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!--仅输出INFO日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARNING</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>　
+        </encoder>
+    </appender>
+
+    <!-- 【事件附件同步】文件日志策略：每天生成一个日志文件，保存30天的日志文件-->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}-%d{yyyy-MM-dd}-%i-error.log</fileNamePattern>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxSaveDays}</maxHistory> <!--max save days -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <!--仅输出INFO日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} | %msg%n</pattern>　
+        </encoder>
+    </appender>
+
+    <!--默认日志级别,大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL和OFF-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="consoleFile"/>
+        <!--<appender-ref ref="zipFile"/>-->
+        <!--<appender-ref ref="debugAppender"/>-->
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="warningAppender"/>
+        <appender-ref ref="errorAppender"/>
+    </root>
+    <!--特定日志级别,其中xxx为项目名称-->
+    <!--<logger name="com.example.springboottest" level="DEBUG" additivity="false">
+        &lt;!&ndash;<appender-ref ref="CONSOLE"/>
+        <appender-ref ref="consoleFile"/>&ndash;&gt;
+        &lt;!&ndash;<appender-ref ref="zipFile"/>&ndash;&gt;
+        &lt;!&ndash;<appender-ref ref="debugAppender"/>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="warningAppender"/>
+        <appender-ref ref="errorAppender"/>&ndash;&gt;
+        &lt;!&ndash;<appender-ref ref="logstash"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="grpc-log"/>&ndash;&gt;
+    </logger>-->
+
+    <!--业务操作日志-->
+    <!--<logger name="POSITION_LOG" level="info" additivity="false">
+        <appender-ref ref="POSITION_LOG_APPENDER"/>
+    </logger>
+    <logger name="EVENT_LOG" level="info" additivity="false">
+        <appender-ref ref="EVENT_LOG_APPENDER"/>
+    </logger>
+    <logger name="TRACK_LOG" level="info" additivity="false">
+        <appender-ref ref="TRACK_LOG_APPENDER"/>
+    </logger>
+    <logger name="FILE_LOG" level="info" additivity="false">
+        <appender-ref ref="FILE_LOG_APPENDER"/>
+    </logger>
+    <logger name="RESTART_LOG" level="info" additivity="false">
+        <appender-ref ref="RESTART_LOG_APPENDER"/>
+    </logger>
+    <logger name="REDIS_LOG" level="info" additivity="false">
+        <appender-ref ref="REDIS_LOG_APPENDER"/>
+    </logger>-->
+</configuration>

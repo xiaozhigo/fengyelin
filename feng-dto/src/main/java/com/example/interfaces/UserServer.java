@@ -1,6 +1,6 @@
 package com.example.interfaces;
 
-import com.example.User;
+import com.example.dto.User;
 
 
 public interface UserServer {

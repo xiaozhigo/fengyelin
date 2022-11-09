@@ -5,6 +5,24 @@ server:
 spring:
   application:
     name: feng-server
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+  redis:
+    database: 0
+    password: 123456
+    sentinel:
+      master: mymaster
+      nodes:
+        - 10.134.1.27:26379
+        - 10.134.1.27:26479
+        - 10.134.1.27:26579
+    lettuce:
+      pool:
+        max-active: 1000
+        max-idle: 50
+        min-idle: 20
+        max-wait: -1
   datasource:
     #1.JDBC
     type: com.alibaba.druid.pool.DruidDataSource
@@ -89,4 +107,4 @@ mybatis-plus:
       logic-delete-value: 1
 logging:
   level:
-    com.*.mapper: debug
+    com.example.mapper: trace

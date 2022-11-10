@@ -3,9 +3,10 @@ package com.example.controller;
 import com.example.dto.User;
 import com.example.biz.UserBiz;
 import com.example.fengcommon.annotation.NoRepeatSubmit;
+import com.example.fengcommon.config.kafka.KafkaProducer;
+import com.example.fengcommon.config.kafka.KafkaTopic;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/user")
 @Api(tags = "用户接口")
 public class UserController {
+
+    @Autowired
+    KafkaProducer kafkaProducer;
 
     @Autowired
     private UserBiz userBiz;
@@ -36,7 +40,7 @@ public class UserController {
         return userInfoRedis;
     }
 
-    @NoRepeatSubmit(lockKey="custId",lockTime = 10)
+    @NoRepeatSubmit(lockKey="custId",lockTime = 60)
     @ApiOperation(value = "查询Redis客用户信息")
     @RequestMapping("/getUserInfoRepeatSubmit/{custId}")
     @ResponseBody
@@ -45,4 +49,10 @@ public class UserController {
         return userInfoRedis;
     }
 
+    @ApiOperation(value = "处理发送kafka")
+    @RequestMapping("/getUserInfoKafka/{custId}")
+    @ResponseBody
+    public void getUserInfoKafka(@PathVariable("custId") String custId){
+        kafkaProducer.send(KafkaTopic.FENG_TOPIC,custId);
+    }
 }

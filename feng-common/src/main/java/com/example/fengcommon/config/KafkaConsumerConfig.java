@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -18,7 +17,6 @@ import org.springframework.kafka.listener.ContainerProperties;
  * kafka 配置类
  */
 @Configuration
-@EnableKafka
 @EnableConfigurationProperties({KafkaProperties.class})
 @AllArgsConstructor
 public class KafkaConsumerConfig {
